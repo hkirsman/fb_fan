@@ -7,6 +7,7 @@
 
 /**
  * Implements of hook_permission().
+ *
  * Create 2 perms for display advice message and configure advice message.
  */
 function fb_fan_permission() {
@@ -19,6 +20,7 @@ function fb_fan_permission() {
 
 /**
  * Implements of hook_menu().
+ *
  * Create admin page in order to change advice message.
  */
 function fb_fan_menu() {
