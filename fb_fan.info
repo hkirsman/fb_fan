@@ -1,4 +1,3 @@
-; $Id: fb_fan.info,v 0.1 2011/03/05 12:15:00 sun Exp $
 name = "Facebook Fan Box"
 description = "Display a Facebook fan box within a block."
 package = Other

@@ -4,7 +4,7 @@
 .fan_box .full_widget { border:0 background:transparent; color:#000;}
 .fan_box div { background:transparent; }
 .fan_box .connections { border-top:0px dashed #FFFFFF;padding:0px; color:#000; }
-.fan_box .connections .total {display:none;} 
+.fan_box .connections .total {display:none;}
 .fan_box .connections_grid { padding:0px; clear:both; width:214px;height:250px;height:126px;overflow:hidden;}
 .app_content_237631442940608 .fan_box .grid_item{}
 .fan_box .grid_item { padding:0; margin:0;  float:left; }

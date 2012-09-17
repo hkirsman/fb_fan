@@ -7,17 +7,17 @@
 function fb_fan_permission() {
   return array(
     'administer fb_fan settings' => array(
-      'title' => t('administer fb_fan settings'), 
-    ),	
+      'title' => t('administer fb_fan settings'),
+    ),
   );
 }
 
 /**
  * Implementation of hook_menu()
  * Create admin page in order to change advice message
- */ 
+ */
 function fb_fan_menu() {
-  
+
   $items = array();
 
   $items['admin/settings/fb_fan'] = array(
@@ -98,13 +98,13 @@ function fb_fan_settings() {
 		'#type' => "checkbox",
 		'#description' => t('Show the Facebook logo'),
 		'#default_value' => variable_get('logo','1'),
-	); 
+	);
 	$form['fb_fan_general_settings']['header'] = array(
 		'#title' => t('Facebook Header'),
 		'#type' => "checkbox",
 		'#description' => t('Show the Facebook Header'),
 		'#default_value' => variable_get('header','1'),
-	); 	
+	);
 	return system_settings_form($form);
 }
 
@@ -127,7 +127,7 @@ function fb_fan_block_view($block_name = '') {
   if ($block_name = 'facebook_fan') {
     // $delta is validated, the block can be displayed.
 	//Build Block content
-	
+
 	 $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme(). '/fb_fan.css?' . rand(1, 1000000);
 	 $api_key = variable_get('api_key', FALSE);
 	 $profile_id = variable_get('profile_id', FALSE);
@@ -136,21 +136,21 @@ function fb_fan_block_view($block_name = '') {
 	 $logo = variable_get('logo', 1);
 	 $header = variable_get('header', 1);
 	 $width = variable_get('width', FALSE);
-	 $height = variable_get('height', FALSE); 	
-	
+	 $height = variable_get('height', FALSE);
+
 	 $content = '';
 	 $content .= '<div id="fb-root"></div>' ;
 	 $content .= '<script src="http://connect.facebook.net/fr_FR/all.js#xfbml=1"></script>' ;
 	 $content .= '<script type="text/javascript">FB.init("'. $api_key . '");</script>';
-	 $content .= '<fb:fan profile_id="' . $profile_id .'"  width="'. $width . '" height="' . $height .'" show_faces="true"  stream="' . $stream . '" header="' .$header . '" connections= "18" css="' . $css . '" logobar="'. $logo . '"></fb:fan>';	
-    
+	 $content .= '<fb:fan profile_id="' . $profile_id .'"  width="'. $width . '" height="' . $height .'" show_faces="true"  stream="' . $stream . '" header="' .$header . '" connections= "18" css="' . $css . '" logobar="'. $logo . '"></fb:fan>';
+
 	$block = array(
-      'subject' => t('Facebook Fan'),	  
+      'subject' => t('Facebook Fan'),
       'content' => $content,
     );
     return $block;
   }
 }
 
- 
+
 
