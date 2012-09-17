@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+.fan_box {position:relative;}
+.fan_box .full_widget { border:0 background:transparent; color:#000;}
+.fan_box div { background:transparent; }
+.fan_box .connections { border-top:0px dashed #FFFFFF;padding:0px; color:#000; }
+.fan_box .connections .total {display:none;} 
+.fan_box .connections_grid { padding:0px; clear:both; width:214px;height:250px;height:126px;overflow:hidden;}
+.app_content_237631442940608 .fan_box .grid_item{}
+.fan_box .grid_item { padding:0; margin:0;  float:left; }
+.fan_box .connections_grid .grid_item {padding:0;width:48px;margin:8px;}
+.fan_box .grid_item img { margin:0;width:48px;height:48px; }
+.fan_box .grid_item .name {display:none; }
+.fan_box .connect_button { padding:8px 0 0 0px; z-index:1000; }
+.fan_box .connect_top, .fan_box .connect_top a { font-size:12px; }
+.fan_box .connect_top { display:block; padding:0 0 0 0;background:transparent; }
+.fan_box .connect_top img { }
+.fan_box .name_block {}
+.fan_box .connect_widget, .fan_box .connect_widget td, .fan_box .connect_widget td.label {}
+.fan_box .connect_widget .connect_widget_interactive_area {margin:0;}
+.fan_box .name_block a { display:block; }
+.fan_box .connect_span { padding:0 0 0 0; }
+.fan_box .connect_action {background:transparent;}
+.fan_box .connect_button_slider {}
+.fan_box .profileimage {width:50px;height:50px;padding-right:2px;}
