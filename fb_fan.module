@@ -1,9 +1,9 @@
 <?php
+
 /**
  * Implements of hook_permission().
  * Create 2 perms for display advice message and configure advice message
  */
-
 function fb_fan_permission() {
   return array(
     'administer fb_fan settings' => array(
@@ -21,21 +21,21 @@ function fb_fan_menu() {
   $items = array();
 
   $items['admin/settings/fb_fan'] = array(
-  'title' => t('Facebook Fan'),
-  'description' => t('Requirements to implement a Facebook fan box'),
+    'title' => 'Facebook Fan',
+    'description' => t('Requirements to implement a Facebook fan box'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('fb_fan_settings'),
     'access arguments' => array('administer fb_fan settings'),
     'type' => MENU_NORMAL_ITEM,
-   );
+  );
 
   return $items;
 }
 
 
 /**
-* Implements of hook_settings().
-*/
+ * Implements of hook_settings().
+ */
 function fb_fan_settings() {
   $form['fb_fan_general_settings'] = array(
     '#title' => t('General Settings'),
@@ -49,7 +49,7 @@ function fb_fan_settings() {
     '#maxlength' => 50,
     '#required' => TRUE,
     '#description' => t('Ex. 6ef2b05cd423f7d1e252f6be07de8557'),
-    '#default_value' => variable_get('api_key',''),
+    '#default_value' => variable_get('api_key', ''),
   );
   $form['fb_fan_general_settings']['profile_id'] = array(
     '#title' => t('Profile ID'),
@@ -113,10 +113,10 @@ function fb_fan_settings() {
  */
 function fb_fan_block_info() {
   $blocks = array();
-    $blocks['facebook_fan'] = array(
-      'info' => t('Facebook Fan'),
-      'cache' => DRUPAL_NO_CACHE,
-    );
+  $blocks['facebook_fan'] = array(
+    'info' => t('Facebook Fan'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
   return $blocks;
 }
 
@@ -126,8 +126,8 @@ function fb_fan_block_info() {
 function fb_fan_block_view($block_name = '') {
   if ($block_name = 'facebook_fan') {
     // $delta is validated, the block can be displayed.
-    //Build Block content
-    $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme(). '/fb_fan.css?' . rand(1, 1000000);
+    // Build Block content.
+    $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme() . '/fb_fan.css?' . rand(1, 1000000);
     $api_key = variable_get('api_key', FALSE);
     $profile_id = variable_get('profile_id', FALSE);
     $stream = variable_get('stream', 1);
@@ -141,7 +141,7 @@ function fb_fan_block_view($block_name = '') {
     $content .= '<div id="fb-root"></div>';
     $content .= '<script src="http://connect.facebook.net/fr_FR/all.js#xfbml=1"></script>';
     $content .= '<script type="text/javascript">FB.init("' . $api_key . '");</script>';
-    $content .= '<fb:fan profile_id="' . $profile_id . '"  width="' . $width . '" height="' . $height .'" show_faces="true"  stream="' . $stream . '" header="' . $header . '" connections= "18" css="' . $css . '" logobar="'. $logo . '"></fb:fan>';
+    $content .= '<fb:fan profile_id="' . $profile_id . '"  width="' . $width . '" height="' . $height .'" show_faces="true"  stream="' . $stream . '" header="' . $header . '" connections= "18" css="' . $css . '" logobar="' . $logo . '"></fb:fan>';
 
     $block = array(
       'subject' => t('Facebook Fan'),
