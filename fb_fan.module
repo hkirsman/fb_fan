@@ -13,7 +13,7 @@
 function fb_fan_permission() {
   return array(
     'administer fb_fan settings' => array(
-      'title' => t('administer fb_fan settings'),
+      'title' => t('Administer fb_fan settings'),
     ),
   );
 }
@@ -49,68 +49,83 @@ function fb_fan_settings() {
     '#type' => "fieldset",
     '#collapsible' => FALSE,
   );
-  $form['fb_fan_general_settings']['api_key'] = array(
+  $form['fb_fan_general_settings']['fb_fan_api_key'] = array(
     '#title' => t('API Key'),
     '#type' => "textfield",
     '#size' => 45,
     '#maxlength' => 50,
     '#required' => TRUE,
     '#description' => t('Ex. 6ef2b05cd423f7d1e252f6be07de8557'),
-    '#default_value' => variable_get('api_key', ''),
+    '#default_value' => variable_get('fb_fan_api_key', ''),
   );
-  $form['fb_fan_general_settings']['profile_id'] = array(
+  $form['fb_fan_general_settings']['fb_fan_profile_id'] = array(
     '#title' => t('Profile ID'),
     '#type' => "textfield",
     '#size' => 45,
     '#maxlength' => 50,
     '#required' => TRUE,
     '#description' => t('Ex. 374542984235'),
-    '#default_value' => variable_get('profile_id', ''),
+    '#default_value' => variable_get('fb_fan_profile_id', ''),
   );
-  $form['fb_fan_general_settings']['connections'] = array(
+  $form['fb_fan_general_settings']['fb_fan_connections'] = array(
     '#title' => t('Connection Amount'),
     '#type' => "textfield",
     '#size' => 45,
     '#maxlength' => 50,
     '#required' => TRUE,
     '#description' => t('Number of fans to display'),
-    '#default_value' => variable_get('connections', ''),
+    '#default_value' => variable_get('fb_fan_connections', ''),
   );
-  $form['fb_fan_general_settings']['width'] = array(
+  $form['fb_fan_general_settings']['fb_fan_width'] = array(
     '#title' => t('Width'),
     '#type' => "textfield",
     '#size' => 45,
     '#maxlength' => 50,
     '#required' => TRUE,
     '#description' => t('Width of the fan box'),
-    '#default_value' => variable_get('width', ''),
+    '#default_value' => variable_get('fb_fan_width', ''),
   );
-  $form['fb_fan_general_settings']['height'] = array(
+  $form['fb_fan_general_settings']['fb_fan_height'] = array(
     '#title' => t('Height'),
     '#type' => "textfield",
     '#size' => 45,
     '#maxlength' => 50,
     '#required' => TRUE,
     '#description' => t('Height of the fan box'),
-    '#default_value' => variable_get('height', ''),
+    '#default_value' => variable_get('fb_fan_height', ''),
   );
-  $form['fb_fan_general_settings']['stream'] = array(
+  $form['fb_fan_general_settings']['fb_fan_css_path'] = array(
+    '#title' => t('CSS Path'),
+    '#type' => "textfield",
+    '#size' => 45,
+    '#maxlength' => 255,
+    '#required' => FALSE,
+    '#description' => t('Ex. http://example.com/style.css. If not set, PATH_TO_THEME/css/fb_fan.css will be used.'),
+    '#default_value' => variable_get('fb_fan_css_path', ''),
+  );
+  $form['fb_fan_general_settings']['fb_fan_cache_css'] = array(
+    '#title' => t('Cache CSS'),
+    '#type' => "checkbox",
+    '#description' => t("By default caching is disabled, because it's better during development."),
+    '#default_value' => variable_get('fb_fan_cache_css', '0'),
+  );
+  $form['fb_fan_general_settings']['fb_fan_stream'] = array(
     '#title' => t('Stream'),
     '#type' => "checkbox",
     '#description' => t('Show postings from the Facebook page'),
-    '#default_value' => variable_get('stream', '1'),
+    '#default_value' => variable_get('fb_fan_stream', '1'),
   );
-  $form['fb_fan_general_settings']['logo'] = array(
+  $form['fb_fan_general_settings']['fb_fan_logo'] = array(
     '#title' => t('Facebook Logo'),
     '#type' => "checkbox",
     '#description' => t('Show the Facebook logo'),
-    '#default_value' => variable_get('logo', '1'),
+    '#default_value' => variable_get('fb_fan_logo', '1'),
   );
-  $form['fb_fan_general_settings']['header'] = array(
+  $form['fb_fan_general_settings']['fb_fan_header'] = array(
     '#title' => t('Facebook Header'),
     '#type' => "checkbox",
     '#description' => t('Show the Facebook Header'),
-    '#default_value' => variable_get('header', '1'),
+    '#default_value' => variable_get('fb_fan_header', '1'),
   );
   return system_settings_form($form);
 }
@@ -132,23 +147,33 @@ function fb_fan_block_info() {
  */
 function fb_fan_block_view($block_name = '') {
   if ($block_name = 'facebook_fan') {
-    // $delta is validated, the block can be displayed.
-    // Build Block content.
-    $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme() . '/fb_fan.css?' . rand(1, 1000000);
-    $api_key = variable_get('api_key', FALSE);
-    $profile_id = variable_get('profile_id', FALSE);
-    $stream = variable_get('stream', 1);
-    $connection = variable_get('connections', FALSE);
-    $logo = variable_get('logo', 1);
-    $header = variable_get('header', 1);
-    $width = variable_get('width', FALSE);
-    $height = variable_get('height', FALSE);
+    $css = variable_get('fb_fan_css_path', FALSE);
+    $cache_css = variable_get('fb_fan_cache_css', '0');
+    $random = '?' . rand(1, 1000000);
+    if (!$css) {
+      if (file_exists(path_to_theme() . '/css/fb_fan.css')) {
+        $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme() . '/css/fb_fan.css' . ($cache_css === '0' ? $random : '');
+      }
+    }
+    elseif ($cache_css == 0)
+    {
+      $css .= $random;
+    }
+    $api_key = variable_get('fb_fan_api_key', FALSE);
+    $profile_id = variable_get('fb_fan_profile_id', FALSE);
+    $stream = variable_get('fb_fan_stream', 1);
+    $connection = variable_get('fb_fan_connections', FALSE);
+    $logo = variable_get('fb_fan_logo', 1);
+    $header = variable_get('fb_fan_header', 1);
+    $width = variable_get('fb_fan_width', FALSE);
+    $height = variable_get('fb_fan_height', FALSE);
+    global $language;
+    $fb_lang = variable_get('fb_language_' . $language->language, 'en_US');
 
     $content = '';
     $content .= '<div id="fb-root"></div>';
-    $content .= '<script src="http://connect.facebook.net/fr_FR/all.js#xfbml=1"></script>';
     $content .= '<script type="text/javascript">FB.init("' . $api_key . '");</script>';
-    $content .= '<fb:fan profile_id="' . $profile_id . '"  width="' . $width . '" height="' . $height . '" show_faces="true"  stream="' . $stream . '" header="' . $header . '" connections= "18" css="' . $css . '" logobar="' . $logo . '"></fb:fan>';
+    $content .= '<fb:fan profile_id="' . $profile_id . '"  width="' . $width . '" height="' . $height . '" show_faces="true"  stream="' . $stream . '" header="' . $header . '" connections="' . $connection . '" ' . ($css ? 'css="' . $css . '" ' : '') . 'logobar="' . $logo . '"></fb:fan>';
 
     $block = array(
       'subject' => t('Facebook Fan'),

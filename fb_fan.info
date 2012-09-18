@@ -2,3 +2,4 @@ name = "Facebook Fan Box"
 description = "Display a Facebook fan box within a block."
 package = Other
 core = 7.x
+configure = admin/settings/fb_fan
