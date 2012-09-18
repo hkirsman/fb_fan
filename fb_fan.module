@@ -155,8 +155,7 @@ function fb_fan_block_view($block_name = '') {
         $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme() . '/css/fb_fan.css' . ($cache_css === '0' ? $random : '');
       }
     }
-    elseif ($cache_css == 0)
-    {
+    elseif ($cache_css == 0) {
       $css .= $random;
     }
     $api_key = variable_get('fb_fan_api_key', FALSE);
