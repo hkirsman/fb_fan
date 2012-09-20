@@ -219,7 +219,11 @@ function fb_fan_edit_fanbox_form_submit($form, &$form_state) {
     }
   }
   variable_set('fb_fan_fanboxes', $fanboxes);
-  drupal_set_message(t('Fanbox added.'));
+  if ($form['fb_fan_general_settings']['is_edit']['#value'] == '1') {
+    drupal_set_message(t('Fanbox changed.'));
+  } else {
+    drupal_set_message(t('Fanbox added.'));
+  }
   drupal_goto(FB_PATH_ADMIN . '/fb_fan/list');
 }
 
