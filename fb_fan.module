@@ -271,7 +271,7 @@ function fb_fan_block_view($block_name = '') {
       $content = '<fb:fan show_faces="true" ' . $attr . ($css ? 'css="' . $css . '" ' : '') . '></fb:fan>';
 
       $block = array(
-        'subject' => t('Facebook Fan'),
+        'subject' => t('Facebook Fan Box'),
         'content' => $content,
       );
       return $block;
