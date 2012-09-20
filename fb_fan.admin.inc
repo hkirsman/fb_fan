@@ -10,6 +10,7 @@
  * Drupal page callback.
  */
 function fb_fan_admin_page_list() {
+  drupal_set_title(t('List Fan Boxes'));
   $header = array('Name', 'Profile ID', 'Edit');
   $rows = array();
   $fanboxes = variable_get('fb_fan_fanboxes', array());

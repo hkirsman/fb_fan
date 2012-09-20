@@ -79,12 +79,14 @@ function fb_fan_menu() {
 function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
   $fanboxes = variable_get('fb_fan_fanboxes', array());
   if ($is_edit && is_numeric(arg(5))) {
+    drupal_set_title(t('Edit Fan Box'));
     $fanbox_id = arg(5);
   } elseif ($is_edit) {
     drupal_set_message('Wrong url. No id set in url.');
     return false;
   } else {
-    // Icreate page.
+    // Create page.
+    drupal_set_title(t('Create Fan Box'));
     $fanbox_id = 'temp';
     $fanboxes[$fanbox_id] = array(
       'fb_fan_name' => '',
