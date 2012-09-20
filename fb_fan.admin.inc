@@ -10,11 +10,12 @@
  * Drupal page callback.
  */
 function fb_fan_admin_page_list() {
-  $header = array('Profile ID', 'Edit');
+  $header = array('Name', 'Profile ID', 'Edit');
   $rows = array();
   $fanboxes = variable_get('fb_fan_fanboxes', array());
   foreach($fanboxes as $id => $fanbox) {
     $rows[] = array(
+      $fanbox['fb_fan_name'],
       $fanbox['fb_fan_profile_id'],
       l('Edit', FB_PATH_ADMIN . '/fb_fan/list/' . $id . '/edit'),
     );

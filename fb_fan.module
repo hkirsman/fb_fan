@@ -80,6 +80,7 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
     // Icreate page.
     $fanbox_id = 'temp';
     $fanboxes[$fanbox_id] = array(
+      'fb_fan_name' => '',
       'fb_fan_profile_id' => '',
       'fb_fan_connections' => '10',
       'fb_fan_width' => '200',
@@ -105,6 +106,15 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
     '#type' => 'hidden',
     '#required' => TRUE,
     '#default_value' => $fanbox_id,
+  );
+  $form['fb_fan_general_settings']['fb_fan_name'] = array(
+    '#title' => t('Name'),
+    '#type' => 'textfield',
+    '#size' => 45,
+    '#maxlength' => 50,
+    '#required' => TRUE,
+    '#description' => t('Ex. My first fan box eng. This field is used to generate name for block.'),
+    '#default_value' => $fanboxes[$fanbox_id]['fb_fan_name'],
   );
   $form['fb_fan_general_settings']['fb_fan_profile_id'] = array(
     '#title' => t('Profile ID'),
@@ -198,6 +208,8 @@ function fb_fan_edit_fanbox_form_submit($form, &$form_state) {
     }
   }
   variable_set('fb_fan_fanboxes', $fanboxes);
+  drupal_set_message(t('Fanbox added.'));
+  drupal_goto(FB_PATH_ADMIN . '/fb_fan/list');
 }
 
 
@@ -223,11 +235,14 @@ function fb_fan_settings() {
  * Implements of hook_block_info().
  */
 function fb_fan_block_info() {
+  $fanboxes = variable_get('fb_fan_fanboxes', array());
   $blocks = array();
-  $blocks['facebook_fan'] = array(
-    'info' => t('Facebook Fan'),
-    'cache' => DRUPAL_NO_CACHE,
-  );
+  foreach($fanboxes as $id => $fanbox) {
+    $blocks['fb_fan_' . $id] = array(
+      'info' => $fanbox['fb_fan_name'],
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    );
+  }
   return $blocks;
 }
 
@@ -235,37 +250,41 @@ function fb_fan_block_info() {
  * Implements of hook_block_view().
  */
 function fb_fan_block_view($block_name = '') {
-  if ($block_name = 'facebook_fan') {
-    $css = variable_get('fb_fan_css_path', FALSE);
-    $cache_css = variable_get('fb_fan_cache_css', '0');
-    $random = '?' . rand(1, 1000000);
-    if (!$css) {
-      if (file_exists(path_to_theme() . '/css/fb_fan.css')) {
-        $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme() . '/css/fb_fan.css' . ($cache_css === '0' ? $random : '');
+  $fanboxes = variable_get('fb_fan_fanboxes', array());
+  foreach($fanboxes as $id => $fanbox) {
+    if ($block_name == 'fb_fan_' . $id) {
+      $css = strlen($fanbox['fb_fan_css_path']) ? $fanbox['fb_fan_css_path'] : FALSE;
+      $cache_css = variable_get('fb_fan_cache_css', '0');
+      $random = '?' . rand(1, 1000000);
+      if (!$css) {
+        if (file_exists(path_to_theme() . '/css/fb_fan.css')) {
+          $css = 'http://' . $_SERVER['HTTP_HOST'] . '/' . path_to_theme() . '/css/fb_fan.css' . ($cache_css === '0' ? $random : '');
+        }
       }
-    }
-    elseif ($cache_css == 0) {
-      $css .= $random;
-    }
-    //$api_key = variable_get('fb_fan_api_key', FALSE);
-    $profile_id = variable_get('fb_fan_profile_id', FALSE);
-    $stream = variable_get('fb_fan_stream', 1);
-    $connection = variable_get('fb_fan_connections', FALSE);
-    $logo = variable_get('fb_fan_logo', 1);
-    $header = variable_get('fb_fan_header', 1);
-    $width = variable_get('fb_fan_width', FALSE);
-    $height = variable_get('fb_fan_height', FALSE);
-    global $language;
-    $fb_lang = variable_get('fb_language_' . $language->language, 'en_US');
+      elseif ($cache_css == '0') {
+        $css .= $random;
+      }
+      $attributes_array = array(
+        'profile_id' => $fanbox['fb_fan_profile_id'],
+        'stream' => $fanbox['fb_fan_stream'],
+        'connections' => $fanbox['fb_fan_connections'],
+        'logobar' => $fanbox['fb_fan_logo'],
+        'header' => $fanbox['fb_fan_header'],
+        'width' => $fanbox['fb_fan_width'],
+        'height' => $fanbox['fb_fan_height']
+      );
+      $attr = '';
+      foreach($attributes_array as $key => $var) {
+        $attr .= $key . '="' . $var . '" ';
+      }
 
-    $content = '';
-    $content .= '<div id="fb-root"></div>';
-    $content .= '<fb:fan profile_id="' . $profile_id . '"  width="' . $width . '" height="' . $height . '" show_faces="true"  stream="' . $stream . '" header="' . $header . '" connections="' . $connection . '" ' . ($css ? 'css="' . $css . '" ' : '') . 'logobar="' . $logo . '"></fb:fan>';
+      $content = '<fb:fan show_faces="true" ' . $attr . ($css ? 'css="' . $css . '" ' : '') . '></fb:fan>';
 
-    $block = array(
-      'subject' => t('Facebook Fan'),
-      'content' => $content,
-    );
-    return $block;
+      $block = array(
+        'subject' => t('Facebook Fan'),
+        'content' => $content,
+      );
+      return $block;
+    }
   }
 }
