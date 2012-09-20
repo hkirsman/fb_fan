@@ -265,10 +265,11 @@ function fb_fan_block_view($block_name = '') {
  * Implements of hook_form_alter().
  */
 function fb_fan_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id['fb_admin_settings']) {
+  if ($form_id == 'fb_admin_settings') {
     $form['fb_fan_general_settings'] = array(
       '#title' => t('Facebook Fan Box Settings'),
       '#type' => "fieldset",
+      '#collapsible' => TRUE,
     );
     $form['fb_fan_general_settings']['fb_fan_cache_css'] = array(
       '#title' => t('Cache CSS'),
