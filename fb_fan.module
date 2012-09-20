@@ -77,6 +77,8 @@ function fb_fan_menu() {
  * Create and edit fanbox.
  */
 function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
+  fb_fan_check_if_fb_application_exists();
+
   $fanboxes = variable_get('fb_fan_fanboxes', array());
   if ($is_edit && is_numeric(arg(5))) {
     drupal_set_title(t('Edit Fan Box'));
@@ -295,5 +297,12 @@ function fb_fan_form_alter(&$form, &$form_state, $form_id) {
       '#description' => t("Turn this on by default. For development is good to disable caching."),
       '#default_value' => variable_get('fb_fan_cache_css', '0'),
     );
+  }
+}
+
+function fb_fan_check_if_fb_application_exists() {
+  $apps = fb_get_all_apps();
+  if (count($apps) == 0) {
+    drupal_set_message(t("Fan Boxes need Facebook application. Don't forget to !create one!", array('!create' => l('create', FB_PATH_ADMIN . '/fb_app_create'))), 'warning');
   }
 }

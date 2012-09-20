@@ -10,10 +10,7 @@
  * Drupal page callback.
  */
 function fb_fan_admin_page_list() {
-  $apps = fb_get_all_apps();
-  if (count($apps) == 0) {
-    drupal_set_message(t("Fan Boxes need application. Please !create one now!", array('!create' => l('create', FB_PATH_ADMIN . '/fb_app_create'))), 'warning');
-  }
+  fb_fan_check_if_fb_application_exists();
   drupal_set_title(t('List Fan Boxes'));
   $header = array('Name', 'Profile ID', 'Edit');
   $rows = array();
