@@ -52,12 +52,23 @@ function fb_fan_menu() {
     'type' => MENU_LOCAL_TASK,
   );
 
-  $items[FB_PATH_ADMIN . '/fb_fan/list/%/edit'] = array(
+  $items[FB_PATH_ADMIN . '/fb_fan/list/edit/%'] = array(
     'title' => 'Edit Fan Box',
     'access arguments' => array(FB_PERM_ADMINISTER),
+    'weight' => 11,
     'type' => MENU_CALLBACK,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('fb_fan_edit_fanbox_form', TRUE),
+  );
+
+  $items[FB_PATH_ADMIN . '/fb_fan/delete/%'] = array(
+    'title' => 'Delete Fan Box',
+    'description' => '',
+    'page callback' => 'fb_fan_admin_page_delete',
+    'page arguments' => array(5),
+    'access arguments' => array(FB_PERM_ADMINISTER),
+    'file' => 'fb_fan.admin.inc',
+    'type' => MENU_CALLBACK,
   );
 
   $items[FB_PATH_ADMIN . '/fb_fan/create'] = array(
@@ -80,9 +91,9 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
   fb_fan_check_if_fb_application_exists();
 
   $fanboxes = variable_get('fb_fan_fanboxes', array());
-  if ($is_edit && is_numeric(arg(5))) {
+  if ($is_edit && is_numeric(arg(6))) {
     drupal_set_title(t('Edit Fan Box'));
-    $fanbox_id = arg(5);
+    $fanbox_id = arg(6);
   } elseif ($is_edit) {
     drupal_set_message('Wrong url. No id set in url.');
     return false;
