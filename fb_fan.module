@@ -231,7 +231,7 @@ function fb_fan_edit_fanbox_form_submit($form, &$form_state) {
   }
 
   foreach ($form['fb_fan_general_settings'] as $item) {
-    if (is_array($item) && isset($item['#type']) && $item['#type'] !='hidden') {
+    if (is_array($item) && isset($item['#type']) && $item['#type'] != 'hidden') {
       $fanboxes[$fanbox_id][$item['#name']] = $item['#value'];
       print_r($fanbox_id);
     }
