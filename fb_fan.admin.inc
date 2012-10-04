@@ -2,7 +2,6 @@
 /**
  * @file
  * Admin pages and forms for Drupal for fb_fan.
- *
  */
 
 
@@ -15,12 +14,12 @@ function fb_fan_admin_page_list() {
   $header = array('Name', 'Profile ID', 'Edit', 'Delete');
   $rows = array();
   $fanboxes = variable_get('fb_fan_fanboxes', array());
-  foreach($fanboxes as $id => $fanbox) {
+  foreach ($fanboxes as $id => $fanbox) {
     $rows[] = array(
       $fanbox['fb_fan_name'],
       $fanbox['fb_fan_profile_id'],
-      l('Edit', FB_PATH_ADMIN . '/fb_fan/list/edit/' . $id),
-      l('Delete', FB_PATH_ADMIN . '/fb_fan/delete/' . $id),
+      l(t('Edit'), FB_PATH_ADMIN . '/fb_fan/list/edit/' . $id),
+      l(t('Delete'), FB_PATH_ADMIN . '/fb_fan/delete/' . $id),
     );
   }
   return theme('table', array('header' => $header, 'rows' => $rows));

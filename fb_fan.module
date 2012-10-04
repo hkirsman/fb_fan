@@ -6,7 +6,7 @@
  */
 
 /**
-  * Implements hook_help().
+ * Implements hook_help().
  */
 function fb_fan_help($path, $arg) {
   switch ($path) {
@@ -14,7 +14,7 @@ function fb_fan_help($path, $arg) {
       return nl2br(file_get_contents(dirname(__FILE__) . '/README.txt'));
     case FB_PATH_ADMIN . '/fb_fan/list':
       return '<p>' . t('Fan Boxes here are also listed on !blocks_page. Enable them from there!', array(
-        '!blocks_page' => l('blocks page', 'admin/structure/block')
+        '!blocks_page' => l(t('blocks page'), 'admin/structure/block'),
       )) . '</p>';
     case FB_PATH_ADMIN . '/fb_fan/create':
       return '<p>' . t('The most important field here is Profile ID which is the id of your Page in Facebook. If your page url is http://www.facebook.com/EXAMPLE, then go to https://graph.facebook.com/EXAMPLE. If you have the correct url, there should be line id. Copy that number to "Profile ID" field.') . '</p>';
@@ -85,7 +85,7 @@ function fb_fan_menu() {
 }
 
 /**
- * Create and edit fanbox.
+ * Form for create and editing fan box.
  */
 function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
   fb_fan_check_if_fb_application_exists();
@@ -94,10 +94,12 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
   if ($is_edit && is_numeric(arg(6))) {
     drupal_set_title(t('Edit Fan Box'));
     $fanbox_id = arg(6);
-  } elseif ($is_edit) {
+  }
+  elseif ($is_edit) {
     drupal_set_message('Wrong url. No id set in url.');
-    return false;
-  } else {
+    return FALSE;
+  }
+  else {
     // Create page.
     drupal_set_title(t('Create Fan Box'));
     $fanbox_id = 'temp';
@@ -108,7 +110,7 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
       'fb_fan_width' => '200',
       'fb_fan_height' => '400',
       'fb_fan_css_path' => '',
-      'fb_fan_stream' =>  '1',
+      'fb_fan_stream' => '1',
       'fb_fan_logo' => '1',
       'fb_fan_header' => '1',
     );
@@ -208,23 +210,28 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
   return $form;
 }
 
+/**
+ * Submit callback for creating and editing fan boxes.
+ */
 function fb_fan_edit_fanbox_form_submit($form, &$form_state) {
   $fanboxes = variable_get('fb_fan_fanboxes', array());
   if ($form['fb_fan_general_settings']['is_edit']['#value'] == '1') {
     // Get allready existing id.
     $fanbox_id = $form['fb_fan_general_settings']['fb_fan_fanbox_id']['#value'];
-  } else {
+  }
+  else {
     // Generate new id.
     if (count($fanboxes) == 0) {
       $fanbox_id = 0;
-    } else {
+    }
+    else {
       $fanbox_id = max(array_keys($fanboxes));
       $fanbox_id++;
     }
   }
 
-  foreach($form['fb_fan_general_settings'] as $item) {
-    if (is_array($item) && isset($item['#type']) && $item['#type']!='hidden') {
+  foreach ($form['fb_fan_general_settings'] as $item) {
+    if (is_array($item) && isset($item['#type']) && $item['#type'] !='hidden') {
       $fanboxes[$fanbox_id][$item['#name']] = $item['#value'];
       print_r($fanbox_id);
     }
@@ -232,7 +239,8 @@ function fb_fan_edit_fanbox_form_submit($form, &$form_state) {
   variable_set('fb_fan_fanboxes', $fanboxes);
   if ($form['fb_fan_general_settings']['is_edit']['#value'] == '1') {
     drupal_set_message(t('Fanbox changed.'));
-  } else {
+  }
+  else {
     drupal_set_message(t('Fanbox added.'));
   }
   drupal_goto(FB_PATH_ADMIN . '/fb_fan/list');
@@ -244,7 +252,7 @@ function fb_fan_edit_fanbox_form_submit($form, &$form_state) {
 function fb_fan_block_info() {
   $fanboxes = variable_get('fb_fan_fanboxes', array());
   $blocks = array();
-  foreach($fanboxes as $id => $fanbox) {
+  foreach ($fanboxes as $id => $fanbox) {
     $blocks['fb_fan_' . $id] = array(
       'info' => $fanbox['fb_fan_name'],
       'cache' => DRUPAL_CACHE_GLOBAL,
@@ -258,7 +266,7 @@ function fb_fan_block_info() {
  */
 function fb_fan_block_view($block_name = '') {
   $fanboxes = variable_get('fb_fan_fanboxes', array());
-  foreach($fanboxes as $id => $fanbox) {
+  foreach ($fanboxes as $id => $fanbox) {
     if ($block_name == 'fb_fan_' . $id) {
       $css = strlen($fanbox['fb_fan_css_path']) ? $fanbox['fb_fan_css_path'] : FALSE;
       $cache_css = variable_get('fb_fan_cache_css', '0');
@@ -278,10 +286,10 @@ function fb_fan_block_view($block_name = '') {
         'logobar' => $fanbox['fb_fan_logo'],
         'header' => $fanbox['fb_fan_header'],
         'width' => $fanbox['fb_fan_width'],
-        'height' => $fanbox['fb_fan_height']
+        'height' => $fanbox['fb_fan_height'],
       );
       $attr = '';
-      foreach($attributes_array as $key => $var) {
+      foreach ($attributes_array as $key => $var) {
         $attr .= $key . '="' . $var . '" ';
       }
 
@@ -315,9 +323,12 @@ function fb_fan_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+/**
+ * Show warning message if no Facebook application hasn't been created.
+ */
 function fb_fan_check_if_fb_application_exists() {
   $apps = fb_get_all_apps();
   if (count($apps) == 0) {
-    drupal_set_message(t("Fan Boxes need Facebook application. Don't forget to !create one!", array('!create' => l('create', FB_PATH_ADMIN . '/fb_app_create'))), 'warning');
+    drupal_set_message(t("Fan Boxes need Facebook application. Don't forget to !create one!", array('!create' => l(t('create'), FB_PATH_ADMIN . '/fb_app_create'))), 'warning');
   }
 }
