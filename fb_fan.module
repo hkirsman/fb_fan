@@ -17,7 +17,7 @@ function fb_fan_help($path, $arg) {
         '!blocks_page' => l(t('blocks page'), 'admin/structure/block'),
       )) . '</p>';
     case FB_PATH_ADMIN . '/fb_fan/create':
-      return '<p>' . t('The most important field here is Profile ID which is the id of your Page in Facebook. If your page url is http://www.facebook.com/EXAMPLE, then go to https://graph.facebook.com/EXAMPLE. If you have the correct url, there should be line id. Copy that number to "Profile ID" field.') . '</p>';
+      return '<p>' . t("The most important field here is Page ID which is the id of your Page in Facebook. If your Facebook page url has a long number in it then that's your page id. If not, then get your page name from url. It's EXAMPLE for this url: http://www.facebook.com/EXAMPLE. Now go to https://graph.facebook.com/EXAMPLE. Find the line that says id. Copy that number to 'Page ID' field.") . '</p>';
   }
 }
 
