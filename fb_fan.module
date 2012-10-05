@@ -141,7 +141,7 @@ function fb_fan_edit_fanbox_form($form, &$form_state, $is_edit = FALSE) {
     '#default_value' => $fanboxes[$fanbox_id]['fb_fan_name'],
   );
   $form['fb_fan_general_settings']['fb_fan_profile_id'] = array(
-    '#title' => t('Profile ID'),
+    '#title' => t('Page ID'),
     '#type' => 'textfield',
     '#size' => 45,
     '#maxlength' => 50,
