@@ -317,7 +317,7 @@ function fb_fan_form_alter(&$form, &$form_state, $form_id) {
     $form['fb_fan_general_settings']['fb_fan_cache_css'] = array(
       '#title' => t('Cache CSS'),
       '#type' => "checkbox",
-      '#description' => t("Turn this on by default. For development is good to disable caching."),
+      '#description' => t("Turn this on by default. For development it is good to disable caching."),
       '#default_value' => variable_get('fb_fan_cache_css', '0'),
     );
   }
