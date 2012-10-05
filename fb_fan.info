@@ -1,4 +1,4 @@
-name = Facebook Fan Box
+name = Themeable Facebook Fan Box
 description = Display a Facebook fan box within a block.
 package = Drupal for Facebook - contrib
 core = 7.x
